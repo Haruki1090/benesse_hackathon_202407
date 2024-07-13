@@ -1,4 +1,5 @@
 import 'package:benesse_hackathon_202407/conponents/custom_bottom_navigation_bar.dart';
+import 'package:benesse_hackathon_202407/login_screen.dart';
 import 'package:benesse_hackathon_202407/screens/class_screen.dart';
 import 'package:benesse_hackathon_202407/screens/profile_screen.dart';
 import 'package:benesse_hackathon_202407/screens/school_screen.dart';
@@ -6,8 +7,6 @@ import 'package:benesse_hackathon_202407/screens/team_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-
-import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -38,18 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Future<void> _logout() async {
     await _auth.signOut();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 
   @override
@@ -62,15 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-          ),
-        ],
-      ),
       body: Center(
         child: userData == null
             ? const CircularProgressIndicator()

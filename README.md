@@ -83,3 +83,13 @@
 |締切日|DateTime|
 |セクション数|Int|
 |範囲|String|
+
+## テストユーザー
+|データ名|値|
+|-|-|
+|email|student01@test.com|
+|password|std01test|
+|学校名|ベネッセ高校|
+|クラブ|野球|
+|学年|高校1年|
+|ユーザー名|谷|

@@ -26,8 +26,25 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } catch (e) {
-      print('ログインエラー: $e');
-      // エラーメッセージの表示など
+      // エラーダイアログの表示
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('エラー'),
+            // TODO: エラーメッセージの種類を判別して適切なメッセージを表示する
+            content: Text('ログインに失敗しました: $e'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 

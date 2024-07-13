@@ -1,6 +1,6 @@
 # benesse_hackathon_202407
 
-<strong> Benesseハッカソン 2024_07
+**Benesseハッカソン 2024_07**
 
 ## テーマ
 ```
@@ -56,3 +56,13 @@
 ### 想定される問題
 - 誰が登録するか問題に当たりそう（重複を許すかどうか、、、）
 
+## 開発環境
+
+|環境項目|詳細|
+|-|-|
+|エディター|Android Studio|
+|メインシュミレーター|iPhone15 (iOS17.5)|
+|言語|Dart|
+|フレームワーク|Flutter|
+|状態管理|Riverpod|
+|データベース|Firebase Firestore|

@@ -1,11 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:benesse_hackathon_202407/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
@@ -16,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _schoolController = TextEditingController();
   final TextEditingController _clubController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String _educationLevel = '高校'; // 初期値を高校に設定
@@ -26,29 +32,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserCredential userCredential =
+        auth.UserCredential userCredential =
             await _auth.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
-        User? user = userCredential.user;
+        auth.User? firebaseUser = userCredential.user;
 
-        if (user != null) {
-          await _firestore.collection('users').doc(user.uid).set({
-            'school': _schoolController.text,
-            'club': _clubController.text,
-            'grade': _selectedGrade,
-            'username': _usernameController.text,
-            'email': _emailController.text,
-            'educationLevel': _educationLevel,
-          });
+        if (firebaseUser != null) {
+          final user = User(
+            id: firebaseUser.uid,
+            email: _emailController.text,
+            username: _usernameController.text,
+            school: _schoolController.text,
+            club: _clubController.text,
+            grade: _selectedGrade,
+            educationLevel: _educationLevel,
+          );
+
+          await _firestore
+              .collection('users')
+              .doc(firebaseUser.uid)
+              .set(user.toJson());
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         }
       } catch (e) {
-        print('登録エラー: $e');
         // エラーメッセージの表示など
         showDialog(
           context: context,

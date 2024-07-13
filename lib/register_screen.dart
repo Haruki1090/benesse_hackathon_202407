@@ -20,8 +20,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String _educationLevel = '高校'; // 初期値を高校に設定
-  String _selectedGrade = '1年'; // 初期値を1年に設定
-  String _selectedClub = 'サッカー部'; // 初期値をサッカー部に設定
+  String _selectedGrade = '1年';
+  String _selectedClub = 'サッカー部';
 
   bool _isLoading = false; // ローディング状態
 
@@ -61,12 +61,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('アカウント登録に成功しました！')),
+            SnackBar(
+              content: Text('アカウント登録に成功しました！'),
+              backgroundColor: Colors.green,
+            ),
           );
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         }
       } catch (e) {
@@ -106,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator()) // ローディング表示
+            ? Center(child: CircularProgressIndicator()) // ローディング表示
             : SingleChildScrollView(
                 child: Form(
                   key: _formKey,

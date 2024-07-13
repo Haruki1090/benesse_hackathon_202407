@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // ログイン処理
   Future<void> _login() async {
     try {
       await _auth.signInWithEmailAndPassword(
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('ログイン'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: const Text('Login'),
+              child: const Text('ログイン'),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
@@ -63,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(builder: (context) => RegisterScreen()),
                 );
               },
-              child: const Text('Register'),
+              child: const Text('アカウントをお持ちでない学生の方はこちら'),
             ),
           ],
         ),

@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:benesse_hackathon_202407/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
@@ -8,10 +6,7 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
   @override
-  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
@@ -20,13 +15,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _schoolController = TextEditingController();
-  final TextEditingController _clubController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String _educationLevel = '高校'; // 初期値を高校に設定
-  String _selectedGrade = '1年';
+  String _selectedGrade = '1年'; // 初期値を1年に設定
+  String _selectedClub = 'サッカー部'; // 初期値をサッカー部に設定
 
   // アカウント登録処理
   Future<void> _register() async {
@@ -45,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: _emailController.text,
             username: _usernameController.text,
             school: _schoolController.text,
-            club: _clubController.text,
+            club: _selectedClub,
             grade: _selectedGrade,
             educationLevel: _educationLevel,
           );
@@ -56,10 +51,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               .set(user.toJson());
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         }
       } catch (e) {
+        print('登録エラー: $e');
         // エラーメッセージの表示など
         showDialog(
           context: context,
@@ -137,12 +133,58 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 const SizedBox(height: 10),
-                TextFormField(
-                  controller: _clubController,
+                DropdownButtonFormField<String>(
+                  value: _selectedClub,
                   decoration: const InputDecoration(labelText: 'クラブ・部活動名'),
+                  items: [
+                    'サッカー部',
+                    '野球部',
+                    'バスケットボール部',
+                    'テニス部',
+                    '水泳部',
+                    '陸上競技部',
+                    'バレーボール部',
+                    'バドミントン部',
+                    '卓球部',
+                    '剣道部',
+                    '柔道部',
+                    '空手部',
+                    '合気道部',
+                    '弓道部',
+                    'ダンス部',
+                    '軽音楽部',
+                    '吹奏楽部',
+                    '美術部',
+                    '書道部',
+                    '茶道部',
+                    '華道部',
+                    '演劇部',
+                    '放送部',
+                    '写真部',
+                    '科学部',
+                    '数学部',
+                    '地学部',
+                    '生物部',
+                    '化学部',
+                    '物理部',
+                    '天文部',
+                    'コンピュータ部',
+                    '家庭科部',
+                    '英語部'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedClub = newValue!;
+                    });
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'クラブ・部活動名を入力してください。';
+                      return 'クラブ・部活動名を選択してください。';
                     }
                     return null;
                   },

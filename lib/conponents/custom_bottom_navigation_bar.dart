@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  final int selectedIndex;
+  final ValueChanged<int> onItemTapped;
+
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      showSelectedLabels: true, // 選択されたアイテムのラベルを常に表示
-      showUnselectedLabels: true, // 選択されていないアイテムのラベルを常に表示
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
       unselectedItemColor: Colors.grey,
       selectedItemColor: Colors.green,
       selectedLabelStyle: const TextStyle(color: Colors.redAccent),
       unselectedLabelStyle: const TextStyle(color: Colors.redAccent),
+      currentIndex: selectedIndex,
+      onTap: onItemTapped,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.school, size: 24),

@@ -23,9 +23,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _selectedGrade = '1年'; // 初期値を1年に設定
   String _selectedClub = 'サッカー部'; // 初期値をサッカー部に設定
 
+  bool _isLoading = false; // ローディング状態
+
   // アカウント登録処理
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true; // ローディング開始
+      });
+
       try {
         auth.UserCredential userCredential =
             await _auth.createUserWithEmailAndPassword(
@@ -49,14 +55,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
               .collection('users')
               .doc(firebaseUser.uid)
               .set(user.toJson());
+
+          setState(() {
+            _isLoading = false; // ローディング終了
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('アカウント登録に成功しました！')),
+          );
+
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         }
       } catch (e) {
         print('登録エラー: $e');
-        // エラーメッセージの表示など
+
+        setState(() {
+          _isLoading = false; // ローディング終了
+        });
+
         showDialog(
           context: context,
           builder: (context) {
@@ -86,177 +105,146 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'メールアドレス'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'メールアドレスを入力してください。';
-                    }
-                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                    if (!emailRegex.hasMatch(value)) {
-                      return '有効なメールアドレスを入力してください。';
-                    }
-                    return null;
-                  },
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator()) // ローディング表示
+            : SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(labelText: 'メールアドレス'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'メールアドレスを入力してください。';
+                          }
+                          final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                          if (!emailRegex.hasMatch(value)) {
+                            return '有効なメールアドレスを入力してください。';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(labelText: 'パスワード'),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'パスワードを入力してください。';
+                          }
+                          if (value.length < 6) {
+                            return 'パスワードは6文字以上で入力してください。';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _schoolController,
+                        decoration: const InputDecoration(labelText: '学校名'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '学校名を入力してください。';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      DropdownButtonFormField<String>(
+                        value: _selectedClub,
+                        decoration:
+                            const InputDecoration(labelText: 'クラブ・部活動名'),
+                        items: ['サッカー部', '野球部', 'バスケットボール部', 'テニス部', '水泳部']
+                            .map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedClub = newValue!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'クラブ・部活動名を選択してください。';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      DropdownButtonFormField<String>(
+                        value: _selectedGrade,
+                        decoration: const InputDecoration(labelText: '学年'),
+                        items: ['1年', '2年', '3年'].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedGrade = newValue!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '学年を選択してください。';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: const InputDecoration(labelText: 'ユーザー名'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'ユーザー名を入力してください。';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Radio<String>(
+                            value: '高校',
+                            groupValue: _educationLevel,
+                            onChanged: (value) {
+                              setState(() {
+                                _educationLevel = value!;
+                              });
+                            },
+                          ),
+                          const Text('高校生'),
+                          Radio<String>(
+                            value: '中学',
+                            groupValue: _educationLevel,
+                            onChanged: (value) {
+                              setState(() {
+                                _educationLevel = value!;
+                              });
+                            },
+                          ),
+                          const Text('中学生'),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _register,
+                        child: const Text('アカウントを作成'),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'パスワード'),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'パスワードを入力してください。';
-                    }
-                    if (value.length < 6) {
-                      return 'パスワードは6文字以上で入力してください。';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _schoolController,
-                  decoration: const InputDecoration(labelText: '学校名'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '学校名を入力してください。';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedClub,
-                  decoration: const InputDecoration(labelText: 'クラブ・部活動名'),
-                  items: [
-                    'サッカー部',
-                    '野球部',
-                    'バスケットボール部',
-                    'テニス部',
-                    '水泳部',
-                    '陸上競技部',
-                    'バレーボール部',
-                    'バドミントン部',
-                    '卓球部',
-                    '剣道部',
-                    '柔道部',
-                    '空手部',
-                    '合気道部',
-                    '弓道部',
-                    'ダンス部',
-                    '軽音楽部',
-                    '吹奏楽部',
-                    '美術部',
-                    '書道部',
-                    '茶道部',
-                    '華道部',
-                    '演劇部',
-                    '放送部',
-                    '写真部',
-                    '科学部',
-                    '数学部',
-                    '地学部',
-                    '生物部',
-                    '化学部',
-                    '物理部',
-                    '天文部',
-                    'コンピュータ部',
-                    '家庭科部',
-                    '英語部'
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedClub = newValue!;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'クラブ・部活動名を選択してください。';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedGrade,
-                  decoration: const InputDecoration(labelText: '学年'),
-                  items: ['1年', '2年', '3年'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedGrade = newValue!;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '学年を選択してください。';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(labelText: 'ユーザー名'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'ユーザー名を入力してください。';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Radio<String>(
-                      value: '高校',
-                      groupValue: _educationLevel,
-                      onChanged: (value) {
-                        setState(() {
-                          _educationLevel = value!;
-                        });
-                      },
-                    ),
-                    const Text('高校生'),
-                    Radio<String>(
-                      value: '中学',
-                      groupValue: _educationLevel,
-                      onChanged: (value) {
-                        setState(() {
-                          _educationLevel = value!;
-                        });
-                      },
-                    ),
-                    const Text('中学生'),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _register,
-                  child: const Text('アカウントを作成'),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }

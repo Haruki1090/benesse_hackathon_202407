@@ -13,6 +13,7 @@ class Homework with _$Homework {
     @DateTimeTimestampConverter() required DateTime deadline,
     required String content,
     @TimestampConverter() required Timestamp timestamp,
+    required double progress, // 進捗状況フィールドを追加
   }) = _Homework;
 
   factory Homework.fromJson(Map<String, dynamic> json) =>

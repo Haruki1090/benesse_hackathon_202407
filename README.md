@@ -3,7 +3,7 @@
 **Benesseハッカソン 2024_07**
 
 ## 各画面紹介
-- Firebase Authentivationによる認証後自動で`school`にリダイレクト
+- `Firebase Authentication`による認証後自動で`school`にリダイレクト
 
 以下ログインしていることを前提とする画面
 
@@ -77,6 +77,34 @@
 |フレームワーク|Flutter|
 |状態管理|Riverpod|
 |データベース|Firebase Firestore|
+|ユーザー認証|Firebase Authentication|
+|ストレージ|Firebase Strage|
+
+## dependencies
+- すべて最新バージョン（2024/7/14）
+
+|パッケージ|使用目的|
+|-|-|
+|firebase_core||
+|firebase_auth|認証|
+|firebase_storage|プロフィール画像の保存|
+|cloud_firestore|データベース|
+|freezed_annotation|freezed|
+|json_annotation|freezed|
+|intl|DateFormater|
+|fl_chart|円グラフ|
+|image_picke|カメラロールへのアクセス|
+|flutter_svg|初期画像のアクセス|
+
+## dev_dependencies
+- すべて最新バージョン（2024/7/14）
+
+|パッケージ|使用目的|
+|-|-|
+|freezed|データクラスの生成|
+|json_serializable|jsonの取り回し|
+|build_runner|コード生成|
+
 
 ## データ構造
 ### ユーザーデータ

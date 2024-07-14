@@ -143,7 +143,7 @@ class _ClassScreenState extends State<ClassScreen> {
                                   titleStyle: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                      color: Colors.black),
                                 ),
                                 PieChartSectionData(
                                   value: (1 - homework.progress) * 100,

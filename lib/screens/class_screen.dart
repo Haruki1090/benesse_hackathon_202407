@@ -147,7 +147,7 @@ class _ClassScreenState extends State<ClassScreen> {
                                 ),
                                 PieChartSectionData(
                                   value: (1 - homework.progress) * 100,
-                                  color: Colors.white,
+                                  color: Colors.grey[300],
                                   title: '',
                                   radius: 18, // 半径を小さく設定
                                 ),

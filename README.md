@@ -2,6 +2,14 @@
 
 **Benesseハッカソン 2024_07**
 
+## 各画面紹介
+|スクリーンショット|ページ名|
+|-|-|
+|<img width=150 src="https://github.com/user-attachments/assets/a6e0fbf1-fa85-42f4-b3ed-93f1492d05a4">|学校トップページ|
+|<img width=150 src="https://github.com/user-attachments/assets/d95eaa12-9238-4e56-89a3-bd99cb2c90ee">|クラスページ（主に宿題登録など）|
+|<img width=150 src="https://github.com/user-attachments/assets/e0fe7cc8-60f0-4f2a-b9f9-24144dc2c5d9">|部活ページ|
+|<img width=150 src="https://github.com/user-attachments/assets/dafaf212-4d54-4826-a3d2-c0c746e3b013">|プロフィールページ|
+
 ## テーマ
 ```
 中高生の学習を促進するような次世代のアプリを考え、開発せよ

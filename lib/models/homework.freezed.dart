@@ -22,9 +22,11 @@ Homework _$HomeworkFromJson(Map<String, dynamic> json) {
 mixin _$Homework {
   String get className => throw _privateConstructorUsedError;
   String get subject => throw _privateConstructorUsedError;
+  @DateTimeTimestampConverter()
   DateTime get deadline => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
-  DateTime get timestamp => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  Timestamp get timestamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,9 +42,9 @@ abstract class $HomeworkCopyWith<$Res> {
   $Res call(
       {String className,
       String subject,
-      DateTime deadline,
+      @DateTimeTimestampConverter() DateTime deadline,
       String content,
-      DateTime timestamp});
+      @TimestampConverter() Timestamp timestamp});
 }
 
 /// @nodoc
@@ -84,7 +86,7 @@ class _$HomeworkCopyWithImpl<$Res, $Val extends Homework>
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as Timestamp,
     ) as $Val);
   }
 }
@@ -100,9 +102,9 @@ abstract class _$$HomeworkImplCopyWith<$Res>
   $Res call(
       {String className,
       String subject,
-      DateTime deadline,
+      @DateTimeTimestampConverter() DateTime deadline,
       String content,
-      DateTime timestamp});
+      @TimestampConverter() Timestamp timestamp});
 }
 
 /// @nodoc
@@ -142,7 +144,7 @@ class __$$HomeworkImplCopyWithImpl<$Res>
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as Timestamp,
     ));
   }
 }
@@ -153,9 +155,9 @@ class _$HomeworkImpl implements _Homework {
   const _$HomeworkImpl(
       {required this.className,
       required this.subject,
-      required this.deadline,
+      @DateTimeTimestampConverter() required this.deadline,
       required this.content,
-      required this.timestamp});
+      @TimestampConverter() required this.timestamp});
 
   factory _$HomeworkImpl.fromJson(Map<String, dynamic> json) =>
       _$$HomeworkImplFromJson(json);
@@ -165,11 +167,13 @@ class _$HomeworkImpl implements _Homework {
   @override
   final String subject;
   @override
+  @DateTimeTimestampConverter()
   final DateTime deadline;
   @override
   final String content;
   @override
-  final DateTime timestamp;
+  @TimestampConverter()
+  final Timestamp timestamp;
 
   @override
   String toString() {
@@ -212,11 +216,12 @@ class _$HomeworkImpl implements _Homework {
 
 abstract class _Homework implements Homework {
   const factory _Homework(
-      {required final String className,
-      required final String subject,
-      required final DateTime deadline,
-      required final String content,
-      required final DateTime timestamp}) = _$HomeworkImpl;
+          {required final String className,
+          required final String subject,
+          @DateTimeTimestampConverter() required final DateTime deadline,
+          required final String content,
+          @TimestampConverter() required final Timestamp timestamp}) =
+      _$HomeworkImpl;
 
   factory _Homework.fromJson(Map<String, dynamic> json) =
       _$HomeworkImpl.fromJson;
@@ -226,11 +231,13 @@ abstract class _Homework implements Homework {
   @override
   String get subject;
   @override
+  @DateTimeTimestampConverter()
   DateTime get deadline;
   @override
   String get content;
   @override
-  DateTime get timestamp;
+  @TimestampConverter()
+  Timestamp get timestamp;
   @override
   @JsonKey(ignore: true)
   _$$HomeworkImplCopyWith<_$HomeworkImpl> get copyWith =>

@@ -10,16 +10,18 @@ _$HomeworkImpl _$$HomeworkImplFromJson(Map<String, dynamic> json) =>
     _$HomeworkImpl(
       className: json['className'] as String,
       subject: json['subject'] as String,
-      deadline: DateTime.parse(json['deadline'] as String),
+      deadline: const DateTimeTimestampConverter()
+          .fromJson(json['deadline'] as Timestamp),
       content: json['content'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp:
+          const TimestampConverter().fromJson(json['timestamp'] as Timestamp),
     );
 
 Map<String, dynamic> _$$HomeworkImplToJson(_$HomeworkImpl instance) =>
     <String, dynamic>{
       'className': instance.className,
       'subject': instance.subject,
-      'deadline': instance.deadline.toIso8601String(),
+      'deadline': const DateTimeTimestampConverter().toJson(instance.deadline),
       'content': instance.content,
-      'timestamp': instance.timestamp.toIso8601String(),
+      'timestamp': const TimestampConverter().toJson(instance.timestamp),
     };

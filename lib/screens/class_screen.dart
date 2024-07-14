@@ -1,4 +1,5 @@
 import 'package:benesse_hackathon_202407/login_screen.dart';
+import 'package:benesse_hackathon_202407/models/homework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +24,15 @@ class _ClassScreenState extends State<ClassScreen> {
 
   Future<void> _postHomework() async {
     if (_formKey.currentState!.validate()) {
-      await _firestore.collection('homeworks').add({
-        'class': _selectedClass,
-        'subject': _selectedSubject,
-        'deadline': _selectedDeadline,
-        'content': _contentController.text,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
+      final homework = Homework(
+        className: _selectedClass,
+        subject: _selectedSubject,
+        deadline: _selectedDeadline,
+        content: _contentController.text,
+        timestamp: Timestamp.now(),
+      );
+
+      await _firestore.collection('homeworks').add(homework.toJson());
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -74,30 +77,41 @@ class _ClassScreenState extends State<ClassScreen> {
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection('homeworks')
-            .where('class', isEqualTo: _selectedClass)
-            .orderBy('timestamp', descending: true)
+            .where('className', isEqualTo: _selectedClass)
+            .orderBy('deadline', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final homeworks = snapshot.data!.docs;
+          if (snapshot.hasError) {
+            return Center(child: Text('エラーが発生しました: ${snapshot.error}'));
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('データがありません'));
+          }
+
+          final homeworks = snapshot.data!.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return Homework.fromJson(data);
+          }).toList();
 
           return ListView.builder(
             itemCount: homeworks.length,
             itemBuilder: (context, index) {
               final homework = homeworks[index];
+              final deadline = homework.deadline.toString();
               return Card(
                 margin: const EdgeInsets.all(10),
                 child: ListTile(
-                  title: Text('${homework['class']} - ${homework['subject']}'),
+                  title: Text('${homework.className} - ${homework.subject}'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                          '締切: ${homework['deadline'].toDate().toLocal().toString().split(' ')[0]}'),
-                      Text('${homework['content']}'),
+                      Text('締切: ${homework.deadline.toString()}'),
+                      Text(homework.content),
                     ],
                   ),
                 ),

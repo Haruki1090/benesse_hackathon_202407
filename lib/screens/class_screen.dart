@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:benesse_hackathon_202407/login_screen.dart';
 import 'package:benesse_hackathon_202407/models/homework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ClassScreen extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -18,6 +20,7 @@ class _ClassScreenState extends State<ClassScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _contentController = TextEditingController();
+  final Random _random = Random();
 
   String _selectedClass = '1年A組';
   String _selectedSubject = '数学I';
@@ -25,12 +28,15 @@ class _ClassScreenState extends State<ClassScreen> {
 
   Future<void> _postHomework() async {
     if (_formKey.currentState!.validate()) {
+      final double randomProgress = _random.nextDouble(); // ランダムな数値を生成
+
       final homework = Homework(
         className: _selectedClass,
         subject: _selectedSubject,
         deadline: _selectedDeadline,
         content: _contentController.text,
         timestamp: Timestamp.now(),
+        progress: randomProgress, // ランダムな進捗状況を設定
       );
 
       await _firestore.collection('homeworks').add(homework.toJson());
@@ -103,17 +109,56 @@ class _ClassScreenState extends State<ClassScreen> {
             itemCount: homeworks.length,
             itemBuilder: (context, index) {
               final homework = homeworks[index];
-              final deadline = homework.deadline.toString();
               return Card(
                 margin: const EdgeInsets.all(10),
-                child: ListTile(
-                  title: Text('${homework.className} - ${homework.subject}'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
                     children: [
-                      Text(
-                          '締切: ${DateFormat('yyyy-MM-dd').format(homework.deadline.toLocal())}'),
-                      Text(homework.content),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${homework.className} - ${homework.subject}'),
+                            Text(
+                                '締切: ${homework.deadline.toLocal().toString().split(' ')[0]}'),
+                            Text(homework.content),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          height: 30, // 高さを半分に設定
+                          child: PieChart(
+                            PieChartData(
+                              sections: [
+                                PieChartSectionData(
+                                  value: homework.progress * 100,
+                                  color: Colors.green,
+                                  title:
+                                      '${(homework.progress * 100).toStringAsFixed(1)}%',
+                                  radius: 18, // 半径を小さく設定
+                                  titleStyle: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                PieChartSectionData(
+                                  value: (1 - homework.progress) * 100,
+                                  color: Colors.white,
+                                  title: '',
+                                  radius: 18, // 半径を小さく設定
+                                ),
+                              ],
+                              borderData: FlBorderData(show: false),
+                              centerSpaceRadius: 20, // センタースペースを小さく設定
+                              sectionsSpace: 0,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

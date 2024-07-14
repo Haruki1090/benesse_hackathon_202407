@@ -15,6 +15,7 @@ _$HomeworkImpl _$$HomeworkImplFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String,
       timestamp:
           const TimestampConverter().fromJson(json['timestamp'] as Timestamp),
+      progress: (json['progress'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$$HomeworkImplToJson(_$HomeworkImpl instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$$HomeworkImplToJson(_$HomeworkImpl instance) =>
       'deadline': const DateTimeTimestampConverter().toJson(instance.deadline),
       'content': instance.content,
       'timestamp': const TimestampConverter().toJson(instance.timestamp),
+      'progress': instance.progress,
     };

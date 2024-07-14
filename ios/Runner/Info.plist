@@ -47,5 +47,11 @@
 	<true/>
 	<key>MinimumOSVersion</key>
     <string>13.0</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need to access your camera to let you upload profile pictures.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need to access your photo library to let you upload profile pictures.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We need to access your microphone for video recording.</string>
 </dict>
 </plist>

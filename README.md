@@ -3,6 +3,10 @@
 **Benesseハッカソン 2024_07**
 
 ## 各画面紹介
+- Firebase Authentivationによる認証後自動で`school`にリダイレクト
+
+以下ログインしていることを前提とする画面
+
 |スクリーンショット|ページ名|
 |-|-|
 |<img width=150 src="https://github.com/user-attachments/assets/a6e0fbf1-fa85-42f4-b3ed-93f1492d05a4">|学校トップページ|
@@ -78,21 +82,30 @@
 ### ユーザーデータ
 |項目|型|
 |-|-|
-|学校名|String|
-|部活|String|
-|ユーザー名|String|
-|学年|Int|
+|club|String|
+|educationLevel|String|
+|email|String|
+|grade|String|
+|id|String|
+|profileImageUrl|String|
+|school|String|
+|username|String|
+
 
 ### 宿題
 |項目|型|
 |-|-|
-|授業クラス|String|
-|教材名|String|
-|締切日|DateTime|
-|セクション数|Int|
-|範囲|String|
+|className|String|
+|content|String|
+|deadline|TimeStamp|
+|progress|Number|
+|subject|String|
+|timeStamp|TimeStamp|
 
-## テストユーザー
+## テストユーザー情報
+- 開発のために作成したユーザー
+- 認証機能を取り入れているため`Authenticaton`を経由してログイン認証を行う
+
 |データ名|値|
 |-|-|
 |email|student01@test.com|

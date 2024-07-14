@@ -54,10 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
-      SchoolScreen(userData: userData), // 学校画面
+      SchoolScreen(), // 学校画面
       ClassScreen(userData: userData), // クラス画面
       TeamScreen(), // チーム画面
-      ProfileScreen(userData: userData), // プロフィール画面
+      ProfileScreen(), // プロフィール画面
     ];
 
     return Scaffold(

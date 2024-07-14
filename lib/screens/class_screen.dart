@@ -3,6 +3,7 @@ import 'package:benesse_hackathon_202407/models/homework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ClassScreen extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -110,7 +111,8 @@ class _ClassScreenState extends State<ClassScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('締切: ${homework.deadline.toString()}'),
+                      Text(
+                          '締切: ${DateFormat('yyyy-MM-dd').format(homework.deadline.toLocal())}'),
                       Text(homework.content),
                     ],
                   ),

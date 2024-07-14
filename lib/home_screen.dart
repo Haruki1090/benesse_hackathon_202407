@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Widget> screens = [
       SchoolScreen(userData: userData), // 学校画面
       ClassScreen(userData: userData), // クラス画面
-      TeamScreen(userData: userData), // チーム画面
+      TeamScreen(), // チーム画面
       ProfileScreen(userData: userData), // プロフィール画面
     ];
 

@@ -19,6 +19,7 @@ dependencies:
   cloud_firestore:
   freezed_annotation:
   json_annotation:
+  intl:
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'package:benesse_hackathon_202407/utils/date_time_timestamp_converter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'homework.freezed.dart';
@@ -8,9 +10,9 @@ class Homework with _$Homework {
   const factory Homework({
     required String className,
     required String subject,
-    required DateTime deadline,
+    @DateTimeTimestampConverter() required DateTime deadline,
     required String content,
-    required DateTime timestamp,
+    @TimestampConverter() required Timestamp timestamp,
   }) = _Homework;
 
   factory Homework.fromJson(Map<String, dynamic> json) =>
